@@ -1,3 +1,11 @@
+"use client";
+
+import { ConnectWallet } from "@/components/ConnectWallet";
+
 export default function Home() {
-  return <div>Hello!</div>;
+  return (
+    <div>
+      <ConnectWallet />
+    </div>
+  );
 }
