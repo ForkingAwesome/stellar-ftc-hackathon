@@ -1,26 +1,3 @@
-// import type { Metadata } from "next";
-// import "./globals.css";
-// import { StellarWalletProvider } from "@/contexts/StellarWalletKitContext";
-
-// export const metadata: Metadata = {
-//   title: "Pulse",
-//   description: "",
-// };
-
-// export default function RootLayout({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   return (
-//     <html lang="en">
-//       <body>
-//
-//       </body>
-//     </html>
-//   );
-// }
-
 import type { Metadata } from "next";
 import "./globals.css";
 import { satoshi } from "./fonts/font";

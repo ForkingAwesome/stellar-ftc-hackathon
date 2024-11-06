@@ -1,3 +1,5 @@
+"use client";
+
 import { useStellarWallet } from "@/contexts/wallet-context";
 
 export const ConnectWallet = () => {
