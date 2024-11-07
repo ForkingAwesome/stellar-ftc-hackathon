@@ -26,12 +26,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`relative h-full ${satoshi.className}`}>
-        <FreighterProvider>
+        <StellarWalletProvider>
+          {/* <FreighterProvider> */}
           <div className="absolute top-4 w-full flex justify-center">
             <Navbar />
           </div>
           {children}
-        </FreighterProvider>
+          {/* </FreighterProvider> */}
+        </StellarWalletProvider>
       </body>
     </html>
   );

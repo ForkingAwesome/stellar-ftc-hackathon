@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useStellarWallet } from "@/contexts/wallet-context";
+import { sendTransaction } from "@/utils/sendTransaction";
 
 interface Claim {
   id: string;
@@ -68,9 +69,9 @@ export default function SendPage() {
     setIsLoading(true);
 
     try {
-      // Add your form submission logic here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      router.push("/success");
+      await sendTransaction();
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      // router.push("/success");
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -143,7 +144,7 @@ export default function SendPage() {
                         setFormData({ ...formData, address: e.target.value })
                       }
                       className="w-full bg-[#1C1E2E] p-3 rounded-xl border border-gray-700/50 focus:border-blue-500 focus:outline-none"
-                      placeholder="Enter claim reference ID"
+                      placeholder="Enter Claim Address"
                     />
                   </div>
 
