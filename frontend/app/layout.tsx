@@ -3,6 +3,7 @@ import "./globals.css";
 import { satoshi } from "./fonts/font";
 import { Navbar } from "@/components/navbar/navbar";
 import { StellarWalletProvider } from "@/contexts/wallet-context";
+import { FreighterProvider } from "@/contexts/FreighterContext";
 
 export const metadata: Metadata = {
   title: "Pulse",
@@ -25,12 +26,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`relative h-full ${satoshi.className}`}>
-        <StellarWalletProvider>
+        <FreighterProvider>
           <div className="absolute top-4 w-full flex justify-center">
             <Navbar />
           </div>
           {children}
-        </StellarWalletProvider>
+        </FreighterProvider>
       </body>
     </html>
   );

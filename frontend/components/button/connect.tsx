@@ -1,20 +1,29 @@
 "use client";
 
+import { useFreighter } from "@/contexts/FreighterContext";
 import { useStellarWallet } from "@/contexts/wallet-context";
+import { getAddress, isConnected } from "@stellar/freighter-api";
+import { useEffect, useState } from "react";
 
 export const ConnectWallet = () => {
-  const { isConnected, connectWallet, disconnectWallet, getAddress } =
-    useStellarWallet();
+  const { disconnectWallet, connectWallet, account } = useFreighter();
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    const checkConnected = async () => {
+      if (await isConnected()) setConnected(true);
+    };
+  }, []);
 
   return (
-    <button>
-      {isConnected() ? (
+    <div>
+      {connected ? (
         <div onClick={disconnectWallet}>
-          Disconnect Wallet ({getAddress().substring(0, 10)})
+          Disconnect Wallet ({account as string})
         </div>
       ) : (
         <div onClick={connectWallet}>Connect Wallet</div>
       )}
-    </button>
+    </div>
   );
 };

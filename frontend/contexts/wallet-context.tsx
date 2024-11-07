@@ -14,6 +14,9 @@ import {
   ISupportedWallet,
   FREIGHTER_ID,
 } from "@creit.tech/stellar-wallets-kit";
+import { Horizon } from "@stellar/stellar-sdk";
+
+const server = new Horizon.Server("https://horizon-testnet.stellar.org");
 
 interface StellarWalletProviderProps {
   children: ReactNode;
@@ -24,6 +27,8 @@ interface StellarContextValue {
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
   getAddress: () => string;
+  getUSDCBalance: () => Promise<string>;
+  currentAddress: string;
 }
 
 const StellarWalletContext = createContext<StellarContextValue | undefined>(
@@ -39,7 +44,8 @@ export const StellarWalletProvider = ({
     modules: allowAllModules(),
   });
 
-  const [connected, setConnected] = useState<boolean>(false);
+  const [connected, setConnected] = useState(false);
+  const [currentAddress, setCurrentAddress] = useState("");
 
   useEffect(() => {
     const storedAccount = localStorage.getItem(
@@ -47,6 +53,7 @@ export const StellarWalletProvider = ({
     );
     if (storedAccount) {
       setConnected(true);
+      setCurrentAddress(storedAccount);
     }
   }, []);
 
@@ -64,6 +71,7 @@ export const StellarWalletProvider = ({
           );
 
           setConnected(true);
+          setCurrentAddress(address);
         },
       });
     } catch (error) {
@@ -79,6 +87,7 @@ export const StellarWalletProvider = ({
     if (connected && address) {
       localStorage.removeItem("stellar_wallet_kit_current_connected_address");
       setConnected(false);
+      setCurrentAddress("");
     }
   };
 
@@ -88,13 +97,30 @@ export const StellarWalletProvider = ({
     ) as string;
   };
 
+  const getUSDCBalance = async () => {
+    const account = await server.loadAccount(currentAddress);
+    const balances = account.balances;
+    const usdcBalance = balances.find(
+      (balance) => "asset_code" in balance && balance.asset_code === "USDC"
+    )?.balance;
+
+    return usdcBalance ? parseFloat(usdcBalance).toPrecision(3) : "0.00";
+  };
+
   const isConnected = () => {
     return connected;
   };
 
   return (
     <StellarWalletContext.Provider
-      value={{ isConnected, connectWallet, disconnectWallet, getAddress }}
+      value={{
+        isConnected,
+        connectWallet,
+        disconnectWallet,
+        getAddress,
+        getUSDCBalance,
+        currentAddress,
+      }}
     >
       {children}
     </StellarWalletContext.Provider>
